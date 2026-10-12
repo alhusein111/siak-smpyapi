@@ -1,0 +1,35 @@
+// Ini adalah alat untuk membaca database kita ke dalam format TypeScript
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Ini adalah pengaturan ke database mana kita terhubung
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Mengambil password dari file .env
+}
+
+// === DESAIN TABEL DATABASE KITA ===
+
+model User {
+  id        String   @id @default(uuid()) // ID unik acak (huruf & angka)
+  email     String   @unique              // Email tidak boleh ada yang sama
+  password  String                        // Password (nanti kita enkripsi)
+  name      String                        // Nama lengkap pengguna
+  role      String   @default("GURU")     // Peran: GURU, BENDAHARA, ADMIN, ORTU
+  
+  createdAt DateTime @default(now())      // Otomatis mencatat waktu pembuatan
+  updatedAt DateTime @updatedAt           // Otomatis mencatat waktu terakhir diubah
+}
+
+model Siswa {
+  id           String   @id @default(uuid())
+  nis          String   @unique  // Data baru yang ditambahkan
+  nisn         String   @unique
+  nama         String
+  kelas        String
+  jenisKelamin String   // "L" atau "P"
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
